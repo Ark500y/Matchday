@@ -95,11 +95,14 @@ input,select{font-family:var(--ff-b);outline:none}
 .pi-name::placeholder{color:#555}
 .pi-role{
   padding:4px 10px;border-radius:20px;font-size:.65rem;font-weight:700;
-  letter-spacing:1px;cursor:pointer;transition:all .2s;min-width:36px;text-align:center;
+  letter-spacing:.6px;cursor:pointer;transition:all .2s;min-width:44px;text-align:center;white-space:nowrap;
 }
 .pi-role[data-role=""]{background:var(--chr2);color:var(--gry)}
-.pi-role[data-role="C"]{background:var(--red);color:var(--wht)}
-.pi-role[data-role="WK"]{background:var(--crm);color:var(--blk)}
+.pi-role[data-role="C"],.pi-role[data-role="C & AR"]{background:var(--red);color:var(--wht)}
+.pi-role[data-role="WK"],.pi-role[data-role="WK & BAT"]{background:var(--crm);color:var(--blk)}
+.pi-role[data-role="BAT"]{background:#18283b;color:#70b0ff;border:1px solid #28446b}
+.pi-role[data-role="BOWL"]{background:#142d18;color:#7ee89b;border:1px solid #23592c}
+.pi-role[data-role="AR"]{background:#381c3b;color:#fca5f1;border:1px solid #632d69}
 .pi-del{background:transparent;color:var(--gry);font-size:1rem;padding:4px;transition:color .2s}
 .pi-del:hover{color:var(--red)}
 .add-player-btn{margin-top:8px;color:var(--red);background:transparent;font-weight:600;font-size:.85rem;padding:8px 0;display:flex;align-items:center;gap:6px}
@@ -130,7 +133,12 @@ input,select{font-family:var(--ff-b);outline:none}
 .opener-item .oi-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--gry);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:transparent;transition:all .2s}
 .opener-item.selected .oi-check{border-color:var(--red);background:var(--red);color:var(--wht)}
 .opener-item .oi-name{font-weight:600;color:var(--wht)}
-.opener-item .oi-role{font-size:.75rem;color:var(--gry)}
+.oi-role{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:12px;margin-left:auto;white-space:nowrap;letter-spacing:.5px}
+.oi-role-c{background:var(--red);color:var(--wht)}
+.oi-role-wk{background:var(--crm);color:var(--blk)}
+.oi-role-bat{background:#18283b;color:#70b0ff;border:1px solid #28446b}
+.oi-role-bowl{background:#142d18;color:#7ee89b;border:1px solid #23592c}
+.oi-role-ar{background:#381c3b;color:#fca5f1;border:1px solid #632d69}
 
 /* ── LIVE SCORING SCREEN ── */
 #live{background:var(--blk)}
@@ -448,19 +456,19 @@ const LS_KEY = 'matchday_state';
 
 const DEFAULT_MY_TEAM_NAME = '30 SB';
 const DEFAULT_MY_TEAM_PLAYERS = [
-  { name: 'Abubakar', role: 'C' },
-  { name: 'Muzumail', role: '' },
-  { name: 'Ubaid', role: '' },
-  { name: 'Wasim', role: 'WK' },
-  { name: 'Mudassar', role: '' },
-  { name: 'Abdulrehman', role: '' },
-  { name: 'Moiz', role: '' },
-  { name: 'Ali Hamza', role: '' },
-  { name: 'Hamza Habib', role: '' },
-  { name: 'Bilal Akhtar', role: '' },
-  { name: 'Salman', role: '' },
-  { name: 'Shahid Nisar', role: '' },
-  { name: 'Umair', role: '' }
+  { name: 'Abubakar', role: 'C & AR' },
+  { name: 'Muzumail', role: 'BAT' },
+  { name: 'Ubaid', role: 'BOWL' },
+  { name: 'Wasim', role: 'WK & BAT' },
+  { name: 'Mudassar', role: 'BAT' },
+  { name: 'Abdulrehman', role: 'BAT' },
+  { name: 'Moiz', role: 'BOWL' },
+  { name: 'Ali Hamza', role: 'BOWL' },
+  { name: 'Hamza Habib', role: 'AR' },
+  { name: 'Bilal Akhtar', role: 'BOWL' },
+  { name: 'Salman', role: 'BOWL' },
+  { name: 'Shahid Nisar', role: 'AR' },
+  { name: 'Umair', role: 'BAT' }
 ];
 
 // ── Helpers ──
@@ -652,8 +660,9 @@ function updatePlayerName(team, idx, val) {
 }
 function toggleRole(team, idx) {
   const p = (team === 'my' ? M.myTeam.players : M.oppTeam.players)[idx];
-  const roles = ['', 'C', 'WK'];
-  p.role = roles[(roles.indexOf(p.role) + 1) % 3];
+  const roles = ['BAT', 'BOWL', 'AR', 'WK & BAT', 'C & AR', ''];
+  const curIdx = roles.indexOf(p.role);
+  p.role = roles[(curIdx + 1) % roles.length];
   renderPlayerInputs(team);
 }
 function saveStep2() {
@@ -766,13 +775,24 @@ function renderStep5(body, footer) {
     <p class="setup-sub">Pick 2 opening batsmen from ${M.myTeam.name}</p>
     <div class="form-label" style="margin-bottom:12px">Opening Batsmen (select 2)</div>
     <ul class="opener-list" id="openerList">
-      ${M.myTeam.players.map((p, i) => `
-        <li class="opener-item" onclick="toggleOpener(${i})">
-          <span class="oi-check">✓</span>
-          <span class="oi-name">${p.name}</span>
-          <span class="oi-role">${p.role ? `(${p.role})` : ''}</span>
-        </li>
-      `).join('')}
+      ${M.myTeam.players.map((p, i) => {
+        let roleBadge = '';
+        if (p.role) {
+          let cls = 'oi-role-bat';
+          if (p.role.includes('C')) cls = 'oi-role-c';
+          else if (p.role.includes('WK')) cls = 'oi-role-wk';
+          else if (p.role === 'BOWL') cls = 'oi-role-bowl';
+          else if (p.role === 'AR') cls = 'oi-role-ar';
+          roleBadge = `<span class="oi-role ${cls}">${p.role}</span>`;
+        }
+        return `
+          <li class="opener-item" onclick="toggleOpener(${i})">
+            <span class="oi-check">✓</span>
+            <span class="oi-name">${p.name}</span>
+            ${roleBadge}
+          </li>
+        `;
+      }).join('')}
     </ul>
     <div class="form-group" style="margin-top:24px">
       <label class="form-label">Opening Bowler (${M.oppTeam.name})</label>
@@ -1607,11 +1627,23 @@ function showNewBatsmanModal(outIdx, overComplete) {
     return;
   }
 
-  const listHTML = available.map(b => `
-    <li class="modal-list-item" onclick="selectNewBatsman(${b.idx}, ${outIdx}, ${overComplete})">
-      ${b.name} ${b.role ? '(' + b.role + ')' : ''}
-    </li>
-  `).join('');
+  const listHTML = available.map(b => {
+    let roleBadge = '';
+    if (b.role) {
+      let cls = 'oi-role-bat';
+      if (b.role.includes('C')) cls = 'oi-role-c';
+      else if (b.role.includes('WK')) cls = 'oi-role-wk';
+      else if (b.role === 'BOWL') cls = 'oi-role-bowl';
+      else if (b.role === 'AR') cls = 'oi-role-ar';
+      roleBadge = `<span class="oi-role ${cls}" style="margin-left:auto">${b.role}</span>`;
+    }
+    return `
+      <li class="modal-list-item" onclick="selectNewBatsman(${b.idx}, ${outIdx}, ${overComplete})">
+        <span>${b.name}</span>
+        ${roleBadge}
+      </li>
+    `;
+  }).join('');
 
   showModal('New Batsman', `${M.batsmen[outIdx].name} is out. Select next batsman:`, `
     <ul class="modal-list">${listHTML}</ul>
