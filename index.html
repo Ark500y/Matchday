@@ -446,6 +446,23 @@ input,select{font-family:var(--ff-b);outline:none}
 let M = null; // Match state
 const LS_KEY = 'matchday_state';
 
+const DEFAULT_MY_TEAM_NAME = '30 SB';
+const DEFAULT_MY_TEAM_PLAYERS = [
+  { name: 'Abubakar', role: 'C' },
+  { name: 'Muzumail', role: '' },
+  { name: 'Ubaid', role: '' },
+  { name: 'Wasim', role: 'WK' },
+  { name: 'Mudassar', role: '' },
+  { name: 'Abdulrehman', role: '' },
+  { name: 'Moiz', role: '' },
+  { name: 'Ali Hamza', role: '' },
+  { name: 'Hamza Habib', role: '' },
+  { name: 'Bilal Akhtar', role: '' },
+  { name: 'Salman', role: '' },
+  { name: 'Shahid Nisar', role: '' },
+  { name: 'Umair', role: '' }
+];
+
 // ── Helpers ──
 const $ = id => document.getElementById(id);
 const show = (id) => { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); $(id).classList.add('active'); };
@@ -491,8 +508,11 @@ function startNewMatch() {
   M = {
     phase: 'setup',
     setupStep: 1,
-    myTeam: { name: 'Sargodha Lions', players: [] },
-    oppTeam: { name: 'Punjab Warriors', players: [] },
+    myTeam: {
+      name: DEFAULT_MY_TEAM_NAME,
+      players: JSON.parse(JSON.stringify(DEFAULT_MY_TEAM_PLAYERS))
+    },
+    oppTeam: { name: 'Opponent XI', players: [] },
     totalOvers: 20,
     bowlerLimit: 4,
     mode: 'chase', // 'chase' or 'full'
@@ -585,17 +605,12 @@ function saveStep1() {
 
 // Step 2: Your Squad
 function renderStep2(body, footer) {
-  if (M.myTeam.players.length === 0) {
-    M.myTeam.players = [
-      {name:'A. Khan',role:'C'},{name:'S. Ahmed',role:'WK'},{name:'H. Ali',role:''},
-      {name:'Z. Khan',role:''},{name:'R. Malik',role:''},{name:'F. Abbas',role:''},
-      {name:'T. Shah',role:''},{name:'U. Qadir',role:''},{name:'W. Hussain',role:''},
-      {name:'B. Raza',role:''},{name:'N. Aslam',role:''}
-    ];
+  if (!M.myTeam.players || M.myTeam.players.length === 0) {
+    M.myTeam.players = JSON.parse(JSON.stringify(DEFAULT_MY_TEAM_PLAYERS));
   }
   body.innerHTML = `
     <h2 class="setup-title fade-in">Your Squad</h2>
-    <p class="setup-sub">${M.myTeam.name} — Add up to 11 players</p>
+    <p class="setup-sub">${M.myTeam.name} — ${M.myTeam.players.length} Players</p>
     <ul class="player-inputs" id="myPlayerList"></ul>
     <button class="add-player-btn" onclick="addPlayer('my')">＋ Add Player</button>
   `;
@@ -622,7 +637,7 @@ function renderPlayerInputs(team) {
 }
 function addPlayer(team) {
   const players = team === 'my' ? M.myTeam.players : M.oppTeam.players;
-  if (players.length >= 11) return;
+  if (players.length >= 25) return;
   players.push({name:'', role:''});
   renderPlayerInputs(team);
 }
@@ -1568,7 +1583,7 @@ function processWicket(howOut) {
   closeModal();
 
   // Check if innings over
-  if (M.wickets >= M.myTeam.players.length - 1 || M.legalBalls >= M.totalOvers * 6) {
+  if (M.wickets >= Math.min(10, M.myTeam.players.length - 1) || M.legalBalls >= M.totalOvers * 6) {
     M.matchOver = true;
     save();
     renderScoreTab();
@@ -1773,7 +1788,8 @@ function undoLast() {
 function checkMatchEnd() {
   if (M.matchOver) return;
   // All out
-  if (M.wickets >= M.myTeam.players.length - 1) {
+  const maxWickets = Math.min(10, M.myTeam.players.length - 1);
+  if (M.wickets >= maxWickets) {
     M.matchOver = true;
     showResult();
     return;
@@ -1798,7 +1814,7 @@ function showResult() {
 
   if (M.target > 0) {
     if (M.score >= M.target) {
-      const wktsLeft = M.myTeam.players.length - 1 - M.wickets;
+      const wktsLeft = Math.min(10, M.myTeam.players.length - 1) - M.wickets;
       text = `${M.myTeam.name} Won!`;
       sub = `by ${wktsLeft} wicket${wktsLeft !== 1 ? 's' : ''} with ${(M.totalOvers * 6 - M.legalBalls)} balls remaining`;
     } else {
@@ -1865,7 +1881,7 @@ function generatePrintableScorecardHTML() {
   let resultText = '';
   if (M.target > 0) {
     if (M.score >= M.target) {
-      const wktsLeft = (M.myTeam.players.length - 1) - M.wickets;
+      const wktsLeft = Math.min(10, M.myTeam.players.length - 1) - M.wickets;
       const ballsLeft = (M.totalOvers * 6) - M.legalBalls;
       resultText = `${M.myTeam.name} won by ${wktsLeft} wicket${wktsLeft !== 1 ? 's' : ''} (${ballsLeft} balls remaining)`;
     } else if (M.matchOver) {
