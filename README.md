@@ -53,6 +53,14 @@ This project is completely self-contained in a single file (`index.html`) with n
 
 ---
 
+## 🔒 Privacy Policy
+
+MATCHDAY is privacy-first. All match scores, squads, and player statistics remain 100% on your local device via `localStorage`. The application contains zero advertising SDKs, zero tracking scripts, and transmits no personal data over the internet.
+
+Read the full [Privacy Policy](privacy.html).
+
+---
+
 ## 📄 License
 
 MIT License. Free to use and customize for local cricket clubs, tournaments, and personal games.

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Privacy Policy — MATCHDAY Cricket Scorer</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#C8102E;--blk:#1A1A1A;--chr:#252525;--chr2:#2f2f2f;
+  --crm:#FFF8F0;--wht:#FFFFFF;--gry:#888;
+}
+body{
+  font-family:'Inter',sans-serif;background:var(--blk);color:var(--crm);
+  line-height:1.6;padding:40px 20px;min-height:100vh;
+}
+.container{max-width:760px;margin:0 auto}
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:3px solid var(--red);padding-bottom:18px;margin-bottom:32px;
+}
+.logo{font-family:'Oswald',sans-serif;font-size:2rem;font-weight:700;letter-spacing:2px}
+.logo-m{color:var(--wht)}.logo-d{color:var(--red)}
+.back-btn{
+  background:var(--chr2);color:var(--crm);padding:8px 16px;border-radius:8px;
+  text-decoration:none;font-size:.85rem;font-weight:600;transition:background .2s;
+}
+.back-btn:hover{background:var(--red);color:var(--wht)}
+h1{font-family:'Oswald',sans-serif;font-size:2.2rem;color:var(--wht);margin-bottom:8px}
+.date{color:var(--gry);font-size:.85rem;margin-bottom:28px}
+.banner{
+  background:rgba(200,16,46,.12);border-left:4px solid var(--red);
+  padding:16px 20px;border-radius:8px;margin-bottom:28px;
+}
+.banner strong{color:var(--wht);display:block;margin-bottom:4px}
+.section{background:var(--chr);border-radius:12px;padding:24px;margin-bottom:20px;border:1px solid var(--chr2)}
+h2{font-family:'Oswald',sans-serif;font-size:1.3rem;color:var(--wht);margin-bottom:10px}
+p{font-size:.95rem;color:rgba(255,248,240,.85);margin-bottom:12px}
+p:last-child{margin-bottom:0}
+ul{margin-left:20px;margin-bottom:12px;color:rgba(255,248,240,.85);font-size:.92rem}
+li{margin-bottom:6px}
+code{background:rgba(0,0,0,.4);padding:2px 6px;border-radius:4px;color:var(--red);font-size:.88rem}
+.footer{text-align:center;color:var(--gry);font-size:.8rem;margin-top:40px;padding-top:20px;border-top:1px solid var(--chr2)}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo"><span class="logo-m">MATCH</span><span class="logo-d">DAY</span></div>
+    <a href="index.html" class="back-btn">← Back to App</a>
+  </div>
+
+  <h1>Privacy Policy</h1>
+  <div class="date">Effective Date: October 27, 2026</div>
+
+  <div class="banner">
+    <strong>Privacy-First Design</strong>
+    MATCHDAY is built from the ground up to operate offline with complete client-side data privacy. We do not transmit, sell, or monitor your personal or cricket match data.
+  </div>
+
+  <div class="section">
+    <h2>1. Overview & Information Collection</h2>
+    <p>MATCHDAY is a cricket scoring and scorecard generation tool. We do <strong>not</strong> collect personal information such as names, email addresses, phone numbers, location data, or device identifiers.</p>
+    <p>All data entered into the application—including squad rosters, team names, custom match rules, ball-by-ball actions, and bowler statistics—is stored solely on your local device.</p>
+  </div>
+
+  <div class="section">
+    <h2>2. Use of Local Storage (localStorage)</h2>
+    <p>The app uses browser <code>localStorage</code> exclusively to:</p>
+    <ul>
+      <li>Preserve active match progress so you can resume scoring if your browser is closed or refreshed.</li>
+      <li>Store default team rosters and role configurations (e.g. 30 SB squad).</li>
+      <li>Maintain custom match formats (overs per innings, bowler quotas).</li>
+    </ul>
+    <p>This data never leaves your device and is not synchronized to any remote server or cloud database.</p>
+  </div>
+
+  <div class="section">
+    <h2>3. Cookies & Tracking Technologies</h2>
+    <p>MATCHDAY does <strong>not</strong> use tracking cookies, advertising beacons, or third-party analytic SDKs (such as Google Analytics or Facebook Pixel). We do not profile users or monitor usage habits.</p>
+  </div>
+
+  <div class="section">
+    <h2>4. PDF Generation & Document Export</h2>
+    <p>When you use the "Download Scorecard PDF" feature, the scorecard document is rendered directly within your web browser using standard browser printing APIs (<code>window.print</code>). No match summaries or generated PDF documents are transmitted over the internet.</p>
+  </div>
+
+  <div class="section">
+    <h2>5. User Control & Data Deletion</h2>
+    <p>You have full autonomy over all information stored within the app:</p>
+    <ul>
+      <li>Clicking <strong>"New Match"</strong> resets match records and delivery history.</li>
+      <li>Clearing your web browser's cache or website data immediately removes all stored rosters and scoring history from your device.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>6. Changes to this Policy</h2>
+    <p>We may periodically update this policy to reflect new capabilities or legal requirements. Any modifications will be posted directly to this page with an updated revision date.</p>
+  </div>
+
+  <div class="section">
+    <h2>7. Contact Information</h2>
+    <p>If you have any questions or feedback regarding this Privacy Policy or the MATCHDAY app, please contact:</p>
+    <p><strong>Email:</strong> <code>support@matchday.app</code></p>
+  </div>
+
+  <div class="footer">
+    &copy; 2026 MATCHDAY Cricket Scorer. All rights reserved.
+  </div>
+</div>
+</body>
+</html>

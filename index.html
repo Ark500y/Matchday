@@ -391,6 +391,11 @@ input,select{font-family:var(--ff-b);outline:none}
     <button class="btn btn-red btn-full" onclick="startNewMatch()">🏏 New Match</button>
     <button class="btn btn-crm btn-full" id="resumeBtn" onclick="resumeMatch()" style="display:none">▶️ Resume Match</button>
   </div>
+  <div style="margin-top:28px;font-size:.78rem;color:var(--gry);display:flex;gap:12px;align-items:center">
+    <button style="background:none;border:none;color:var(--gry);cursor:pointer;text-decoration:underline;font-size:.78rem" onclick="showPrivacyPolicy()">Privacy Policy</button>
+    <span>•</span>
+    <span>v1.2</span>
+  </div>
 </div>
 
 <!-- ═══════ SETUP WIZARD ═══════ -->
@@ -1886,9 +1891,49 @@ function showMenu() {
     <ul class="modal-list">
       <li class="modal-list-item" onclick="closeModal()">▶️ Resume Scoring</li>
       <li class="modal-list-item" onclick="closeModal();downloadScorecardPDF()">📄 Export Scorecard PDF</li>
+      <li class="modal-list-item" onclick="closeModal();showPrivacyPolicy()">🔒 Privacy Policy</li>
       <li class="modal-list-item" onclick="closeModal();startNewMatch()">🔄 New Match</li>
       <li class="modal-list-item" onclick="closeModal();goHome()">🏠 Go Home</li>
     </ul>
+  `);
+}
+
+function showPrivacyPolicy() {
+  showModal('Privacy Policy', 'Last updated: October 2026', `
+    <div style="font-size:.85rem;color:var(--crm);line-height:1.6;display:flex;flex-direction:column;gap:12px;text-align:left;max-height:58vh;overflow-y:auto;padding-right:4px">
+      <div style="background:var(--blk);padding:12px;border-radius:var(--r-sm);border-left:3px solid var(--red)">
+        <strong style="color:var(--wht)">Your Privacy Matters</strong><br/>
+        MATCHDAY is designed to respect your privacy. All cricket match scores, player names, and statistics are stored locally on your own device.
+      </div>
+
+      <div>
+        <strong style="color:var(--wht);display:block;margin-bottom:2px">1. Information We Collect</strong>
+        We do <strong>not</strong> collect any personal identifiable information, passwords, location data, or phone contacts. All squad names and match scores you enter remain entirely on your device.
+      </div>
+
+      <div>
+        <strong style="color:var(--wht);display:block;margin-bottom:2px">2. Local Storage Usage</strong>
+        MATCHDAY utilizes your web browser's local storage (<code>localStorage</code>) strictly to preserve match state, team squads, and scoring history so you can resume scoring even after refreshing or closing the browser.
+      </div>
+
+      <div>
+        <strong style="color:var(--wht);display:block;margin-bottom:2px">3. No Third-Party Tracking or Ads</strong>
+        The application contains zero advertising SDKs, zero user tracking scripts, and zero analytical trackers. Your data is never sold, shared, or sent to any remote server.
+      </div>
+
+      <div>
+        <strong style="color:var(--wht);display:block;margin-bottom:2px">4. PDF Export & Data Control</strong>
+        When you choose to export a scorecard as a PDF, the document is generated client-side inside your browser using standard print APIs. You can clear all stored match data at any time by starting a new match or clearing your browser's site data.
+      </div>
+
+      <div>
+        <strong style="color:var(--wht);display:block;margin-bottom:2px">5. Contact & Support</strong>
+        For inquiries or suggestions regarding MATCHDAY, reach out at <code>support@matchday.app</code>.
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <button class="btn btn-red btn-sm btn-full" onclick="closeModal()">Close</button>
+    </div>
   `);
 }
 
